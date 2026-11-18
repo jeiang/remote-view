@@ -18,6 +18,16 @@
       }));
     in
     {
+      packages = forAll (pkgs: {
+        default = pkgs.rustPlatform.buildRustPackage {
+          pname = "remote-view";
+          version = "0.1.0";
+          src = pkgs.lib.cleanSource ./.;
+          cargoLock.lockFile = ./Cargo.lock;
+          meta.mainProgram = "remote-view";
+        };
+      });
+
       devShells = forAll (pkgs:
         let
           toolchain = pkgs.rust-bin.stable.latest.default.override {
