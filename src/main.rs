@@ -209,7 +209,7 @@ fn render_viewer(segs: &[String], siblings: &[Entry]) -> Html<String> {
     let b = format!(
         "<header><a id=up href=\"{up}\">✕ back</a>{p} <span class=sp>{n} <small>{pos}</small></span>{nx} <a href=\"{raw}\" download>⬇</a></header>\
          <div class=stage>{el}</div>\
-         <script>addEventListener('keydown',e=>{{if(e.target.tagName=='INPUT'||e.altKey||e.ctrlKey||e.metaKey)return;\
+         <script>addEventListener('keydown',e=>{{if(['INPUT','VIDEO','AUDIO'].includes(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey)return;\
          const k={{ArrowLeft:'prev',ArrowRight:'next',Escape:'up'}}[e.key];const a=k&&document.getElementById(k);if(a)location=a.href}})</script>",
         p = nav("◀ prev", "prev", &prev),
         nx = nav("next ▶", "next", &next),
