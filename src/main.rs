@@ -121,6 +121,11 @@ header .sp{flex:1}
 .thumb{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;background:#0c0c0c}
 .thumb img,.thumb video{width:100%;height:100%;object-fit:cover}
 .name{padding:.5em .7em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header button{background:#262626;color:#ddd;border:1px solid #333;border-radius:6px;padding:.3em .7em;cursor:pointer;font:inherit}
+.grid.list{grid-template-columns:1fr;gap:0;padding:0}
+.grid.list .card{flex-direction:row;align-items:center;border-radius:0;border-bottom:1px solid #262626}
+.grid.list .thumb{height:48px;width:48px;flex-shrink:0;font-size:24px}
+.grid.list .name{padding:.4em .7em}
 .stage{height:calc(100vh - 46px);display:flex;align-items:center;justify-content:center}
 .stage img,.stage video{max-width:100%;max-height:100%}
 .stage audio{width:80%}
@@ -144,7 +149,7 @@ fn breadcrumbs(segs: &[String]) -> String {
 
 fn render_dir(segs: &[String], entries: &[Entry]) -> Html<String> {
     let base: Vec<&str> = segs.iter().map(String::as_str).collect();
-    let mut b = format!("<header>{}</header><div class=grid>", breadcrumbs(segs));
+    let mut b = format!("<header>{}<span class=sp></span><button id=view-toggle>list</button></header><div class=grid>", breadcrumbs(segs));
     if !segs.is_empty() {
         let up = url(&base[..base.len() - 1]);
         let up = if up == "/" { up } else { format!("{up}/") };
@@ -173,7 +178,7 @@ fn render_dir(segs: &[String], entries: &[Entry]) -> Html<String> {
             n = esc(&e.name)
         );
     }
-    b.push_str("</div>");
+    b.push_str("</div><script>const g=document.querySelector('.grid'),b=document.getElementById('view-toggle');const apply=v=>{g.classList.toggle('list',v==='list');b.textContent=v==='list'?'grid':'list';localStorage.setItem('view',v)};apply(localStorage.getItem('view')||'grid');b.addEventListener('click',()=>apply(g.classList.contains('list')?'grid':'list'));</script>");
     page(&format!("/{}", segs.join("/")), &b)
 }
 
